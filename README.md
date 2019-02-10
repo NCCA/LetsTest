@@ -6,4 +6,4 @@ This has been inspired by [Cyber Dojo](https://cyber-dojo.org/) where you can ge
 
 This has mainly been designed as a simple framework for students to concentrate on basic Test Driven Development (TDD) in the Labs 
 
-[!alt](images/demo.gif)
+![demo](images/demo.gif)
