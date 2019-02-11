@@ -4,7 +4,9 @@ from __future__ import print_function
 import os,sys
 
 from PyQt5.QtWidgets import (QLabel,QLineEdit, QApplication,QFileDialog, QMainWindow,QMessageBox,QGroupBox,QPushButton,QVBoxLayout,QRadioButton)
-
+########################################################################################
+# main UI
+########################################################################################
 class MainWindow(QMainWindow):
   def __init__(self):
     self.directory=None
@@ -40,10 +42,16 @@ class MainWindow(QMainWindow):
     self.setCentralWidget(self.gridGroupBox)
 
 
+########################################################################################
+# activated when choose dir button is pressed
+########################################################################################
 
   def chooseDir(self):
     self.directory = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
     self.selectedDir.setText(self.directory)
+########################################################################################
+# generate our cpp files
+########################################################################################
 
   def generateFiles(self):
     if self.directory == None :
@@ -76,6 +84,9 @@ class MainWindow(QMainWindow):
       self.writeTestFileFunction()
     sys.exit(0)
 
+########################################################################################
+# write makefile
+########################################################################################
 
   def writeMakefile(self) :
     makefile='''
@@ -109,6 +120,9 @@ test: makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
 '''
     with open('Makefile', 'w') as currentFile:
       currentFile.write(makefile)
+########################################################################################
+# write header for class
+########################################################################################
 
   def writeClassHeader(self) :
     header='''
@@ -130,6 +144,9 @@ class {1}
     with open(self.className.text()+'.h', 'w') as currentFile:
       currentFile.write(header)
 
+########################################################################################
+# write cpp for class
+########################################################################################
 
   def writeClassCpp(self) :
     cppfile='''
@@ -139,7 +156,10 @@ class {1}
     with open(self.className.text()+'.cpp', 'w') as currentFile:
       currentFile.write(cppfile)
   
-  
+########################################################################################
+# write header for function
+########################################################################################
+ 
   
   def writeFunctionHeader(self) :
     header='''
@@ -151,6 +171,9 @@ class {1}
 '''.format(self.className.text().upper(),self.className.text())
     with open(self.className.text()+'.h', 'w') as currentFile:
       currentFile.write(header)
+########################################################################################
+# write cpp for function
+########################################################################################
 
   def writeFunctionCpp(self) :
     cppfile='''
@@ -164,6 +187,9 @@ int {0}()
     with open(self.className.text()+'.cpp', 'w') as currentFile:
       currentFile.write(cppfile)
   
+########################################################################################
+# write test file for class
+########################################################################################
   
   
   def writeTestFileClass(self) :
@@ -181,6 +207,9 @@ TEST({0}, fail)
     with open(self.className.text()+'Tests.cpp', 'w') as currentFile:
       currentFile.write(testFile)
 
+########################################################################################
+# write test file for function
+########################################################################################
   
   def writeTestFileFunction(self) :
     testFile='''
@@ -198,8 +227,10 @@ TEST({0}, fail)
       currentFile.write(testFile)
 
 
+########################################################################################
+# main 
+########################################################################################
 
-# Below runs the "main" function
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	mainWin = MainWindow()
