@@ -66,9 +66,14 @@ class MainWindow(QMainWindow):
     os.mkdir(cwd)
     os.chdir(cwd)
     self.writeMakefile()
-    self.writeClassHeader()
-    self.writeClassCpp()
-    self.writeTestFile()
+    if self.radio1.isChecked() :
+      self.writeClassHeader()
+      self.writeClassCpp()
+      self.writeTestFileClass()
+    else:
+      self.writeFunctionHeader()
+      self.writeFunctionCpp()
+      self.writeTestFileFunction()
     sys.exit(0)
 
 
@@ -124,6 +129,8 @@ class {1}
 '''.format(self.className.text().upper(),self.className.text())
     with open(self.className.text()+'.h', 'w') as currentFile:
       currentFile.write(header)
+
+
   def writeClassCpp(self) :
     cppfile='''
 #include "{}.h"
@@ -131,7 +138,35 @@ class {1}
 
     with open(self.className.text()+'.cpp', 'w') as currentFile:
       currentFile.write(cppfile)
-  def writeTestFile(self) :
+  
+  
+  
+  def writeFunctionHeader(self) :
+    header='''
+#ifndef {0}_H
+#define {0}_H
+  extern int {1}();
+
+#endif
+'''.format(self.className.text().upper(),self.className.text())
+    with open(self.className.text()+'.h', 'w') as currentFile:
+      currentFile.write(header)
+
+  def writeFunctionCpp(self) :
+    cppfile='''
+#include "{0}.h"
+int {0}()
+{{
+  return -99;
+}}
+'''.format(self.className.text())
+
+    with open(self.className.text()+'.cpp', 'w') as currentFile:
+      currentFile.write(cppfile)
+  
+  
+  
+  def writeTestFileClass(self) :
     testFile='''
 #include "{0}.h"
 #include <gtest/gtest.h>
@@ -146,13 +181,29 @@ TEST({0}, fail)
     with open(self.className.text()+'Tests.cpp', 'w') as currentFile:
       currentFile.write(testFile)
 
+  
+  def writeTestFileFunction(self) :
+    testFile='''
+#include "{0}.h"
+#include <gtest/gtest.h>
+using namespace ::testing;
+
+TEST({0}, fail)
+{{
+    ASSERT_EQ({0}(),0);
+}}
+'''.format(self.className.text())
+
+    with open(self.className.text()+'Tests.cpp', 'w') as currentFile:
+      currentFile.write(testFile)
+
 
 
 # Below runs the "main" function
 if __name__ == "__main__":
 	app = QApplication(sys.argv)
 	mainWin = MainWindow()
-	mainWin.resize(400,400)
+	mainWin.resize(400,200)
 	mainWin.show()
 	sys.exit(app.exec_())    
 
