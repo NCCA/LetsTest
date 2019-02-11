@@ -84,3 +84,39 @@ TEST(Vec3, fail)
 }
 
 ```
+
+If you choose to generate a Function rather than a class you get the following
+
+```
+
+#include "MyFunction.h"
+int MyFunction()
+{
+  return -99;
+}
+```
+
+```
+
+#ifndef MYFUNCTION_H
+#define MYFUNCTION_H
+  extern int MyFunction();
+
+#endif
+
+```
+
+And the tests 
+
+```
+
+#include "MyFunction.h"
+#include <gtest/gtest.h>
+using namespace ::testing;
+
+TEST(MyFunction, fail)
+{
+    ASSERT_EQ(MyFunction(),0);
+}
+
+```
