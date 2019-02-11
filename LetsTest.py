@@ -49,11 +49,18 @@ class LetsTestGUI:
     os.mkdir(cwd)
     os.chdir(cwd)
     self.writeMakefile()
-    self.writeClassHeader()
-    self.writeClassCpp()
-    self.writeTestFile()
+    if self.classOrFunc==1 :
+      self.writeClassHeader()
+      self.writeClassCpp()
+      self.writeTestFileClass()
+    else:
+      self.writeFunctionHeader()
+      self.writeFunctionCpp()
+      self.writeTestFileFunction()
     sys.exit(0)
-
+########################################################################################
+# write makefile
+########################################################################################
 
   def writeMakefile(self) :
     makefile='''
@@ -87,7 +94,9 @@ test: makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
 '''
     with open('Makefile', 'w') as currentFile:
       currentFile.write(makefile)
-
+########################################################################################
+# write header for class
+########################################################################################
   def writeClassHeader(self) :
     header='''
 #ifndef {0}_H
@@ -107,6 +116,10 @@ class {1}
 '''.format(self.className.get().upper(),self.className.get())
     with open(self.className.get()+'.h', 'w') as currentFile:
       currentFile.write(header)
+########################################################################################
+# write cpp for class
+########################################################################################
+
   def writeClassCpp(self) :
     cppfile='''
 #include "{}.h"
@@ -114,7 +127,44 @@ class {1}
 
     with open(self.className.get()+'.cpp', 'w') as currentFile:
       currentFile.write(cppfile)
-  def writeTestFile(self) :
+
+########################################################################################
+# write header for function
+########################################################################################
+ 
+  
+  def writeFunctionHeader(self) :
+    header='''
+#ifndef {0}_H
+#define {0}_H
+  extern int {1}();
+
+#endif
+'''.format(self.className.get().upper(),self.className.get())
+    with open(self.className.get()+'.h', 'w') as currentFile:
+      currentFile.write(header)
+########################################################################################
+# write cpp for function
+########################################################################################
+
+  def writeFunctionCpp(self) :
+    cppfile='''
+#include "{0}.h"
+int {0}()
+{{
+  return -99;
+}}
+'''.format(self.className.get())
+
+    with open(self.className.get()+'.cpp', 'w') as currentFile:
+      currentFile.write(cppfile)
+  
+########################################################################################
+# write test file for class
+########################################################################################
+  
+  
+  def writeTestFileClass(self) :
     testFile='''
 #include "{0}.h"
 #include <gtest/gtest.h>
@@ -128,6 +178,30 @@ TEST({0}, fail)
 
     with open(self.className.get()+'Tests.cpp', 'w') as currentFile:
       currentFile.write(testFile)
+
+########################################################################################
+# write test file for function
+########################################################################################
+  
+  def writeTestFileFunction(self) :
+    testFile='''
+#include "{0}.h"
+#include <gtest/gtest.h>
+using namespace ::testing;
+
+TEST({0}, fail)
+{{
+    ASSERT_EQ({0}(),0);
+}}
+'''.format(self.className.get())
+
+    with open(self.className.get()+'Tests.cpp', 'w') as currentFile:
+      currentFile.write(testFile)
+
+
+########################################################################################
+# main 
+########################################################################################
 
 
 
