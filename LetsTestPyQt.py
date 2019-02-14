@@ -197,7 +197,8 @@ int {0}()
 #include "{0}.h"
 #include <gtest/gtest.h>
 using namespace ::testing;
-
+// for more details on gtest see here https://github.com/google/googletest/blob/master/googletest/docs/primer.md
+// my lecture https://nccastaff.bournemouth.ac.uk/jmacey/PP/slides/testing/slides.html#/
 TEST({0}, fail)
 {{
     ASSERT_EQ(0,1);
@@ -216,7 +217,8 @@ TEST({0}, fail)
 #include "{0}.h"
 #include <gtest/gtest.h>
 using namespace ::testing;
-
+// for more details on gtest see here https://github.com/google/googletest/blob/master/googletest/docs/primer.md
+// my lecture https://nccastaff.bournemouth.ac.uk/jmacey/PP/slides/testing/slides.html#/
 TEST({0}, fail)
 {{
     ASSERT_EQ({0}(),0);
