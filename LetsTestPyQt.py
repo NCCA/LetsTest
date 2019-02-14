@@ -104,10 +104,10 @@ COMPILED_HPP_FILES = $(patsubst %.h,%.compiled_hpp,$(HPP_FILES))
 CPP_FILES = $(wildcard *.cpp)
 
 .PHONY: test.output
-test.output: test makefile
+test.output: test Makefile
 	@./$< --gtest_shuffle
 
-test: makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
+test: Makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
 	@$(CXX) $(CXXFLAGS) -O $(CPP_FILES) $(GTEST_LIBS) -o $@
 
 # This rule ensures header files build in their own right.
