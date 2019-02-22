@@ -104,10 +104,10 @@ COMPILED_HPP_FILES = $(patsubst %.h,%.compiled_hpp,$(HPP_FILES))
 CPP_FILES = $(wildcard *.cpp)
 
 .PHONY: test.output
-test.output: test makefile
+test.output: test Makefile
 	@./$< --gtest_shuffle
 
-test: makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
+test: Makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
 	@$(CXX) $(CXXFLAGS) -O $(CPP_FILES) $(GTEST_LIBS) -o $@
 
 # This rule ensures header files build in their own right.
@@ -214,7 +214,8 @@ int {0}()
 #include "{0}.h"
 #include <gtest/gtest.h>
 using namespace ::testing;
-
+// for more details on gtest see here https://github.com/google/googletest/blob/master/googletest/docs/primer.md
+// my lecture https://nccastaff.bournemouth.ac.uk/jmacey/PP/slides/testing/slides.html#/
 TEST({0}, fail)
 {{
     ASSERT_EQ(0,1);
@@ -233,7 +234,8 @@ TEST({0}, fail)
 #include "{0}.h"
 #include <gtest/gtest.h>
 using namespace ::testing;
-
+// for more details on gtest see here https://github.com/google/googletest/blob/master/googletest/docs/primer.md
+// my lecture https://nccastaff.bournemouth.ac.uk/jmacey/PP/slides/testing/slides.html#/
 TEST({0}, fail)
 {{
     ASSERT_EQ({0}(),0);
