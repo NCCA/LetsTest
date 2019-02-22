@@ -3,7 +3,7 @@
 from __future__ import print_function
 import os,sys
 
-from PyQt5.QtWidgets import (QLabel,QLineEdit, QApplication,QFileDialog, QMainWindow,QMessageBox,QGroupBox,QPushButton,QVBoxLayout,QRadioButton)
+from PyQt5.QtWidgets import (QLabel,QLineEdit, QApplication,QFileDialog, QMainWindow,QMessageBox,QGroupBox,QPushButton,QVBoxLayout,QRadioButton,QCheckBox)
 ########################################################################################
 # main UI
 ########################################################################################
@@ -27,7 +27,8 @@ class MainWindow(QMainWindow):
     layout.addWidget(self.radio2)
     self.selectedDir=QLabel('') 
     layout.addWidget(self.selectedDir)
-
+    self.useQmake= QCheckBox("use qmake")
+    layout.addWidget(self.useQmake)
     self.selectDir=QPushButton('Select Directory')
     layout.addWidget(self.selectDir)
     self.generate=QPushButton('Generate')
@@ -35,7 +36,6 @@ class MainWindow(QMainWindow):
 		# connect buttons to methods
     self.selectDir.clicked.connect(self.chooseDir)
     self.generate.clicked.connect(self.generateFiles)
-
 
     # add stuff to layouts etc
     self.gridGroupBox.setLayout(layout)
@@ -118,8 +118,25 @@ test: makefile $(CPP_FILES) $(COMPILED_HPP_FILES)
 %.compiled_hpp: %.h
 	@$(CXX) -x c++ $(CXXFLAGS) -c -o $@ $<
 '''
-    with open('Makefile', 'w') as currentFile:
-      currentFile.write(makefile)
+
+    qmake='''
+TARGET=test
+SOURCES+=*.cpp
+HEADERS+=*.h
+CONFIG-=app_bundle
+QMAKE_CXXFLAGS += -std=c++1z
+QMAKE_CXXFLAGS += -Wall -Wextra
+QMAKE_CXXFLAGS += -g
+INCLUDEPATH+=/usr/local/include
+LIBS+= -L/usr/local/lib -lgtest -lgtest_main -pthread
+'''
+    if self.useQmake.isChecked() :
+
+      with open('{0}Tests.pro'.format(self.className.text()), 'w') as currentFile:
+        currentFile.write(qmake)
+    else :
+      with open('Makefile', 'w') as currentFile:
+        currentFile.write(makefile)
 ########################################################################################
 # write header for class
 ########################################################################################
